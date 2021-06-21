@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.picpay.desafio.android"
+        minSdkVersion rootProject.ext.min_sdk_verion
+        targetSdkVersion rootProject.ext.target_sdk_verion
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            debuggable true
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+    viewBinding {
+        enabled true
+    }
+}
+
+dependencies {
+    Map<String, String> dependencies = rootProject.ext.dependencies
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':data')
+    implementation project(':domain')
+
+    implementation dependencies.kotlinLib
+    implementation dependencies.coreKtx
+
+    implementation dependencies.supportAppCompat
+    implementation dependencies.constraintLayout
+    implementation dependencies.supportDesign
+
+    implementation dependencies.liveDataKtx
+    implementation dependencies.lifecycleKtx
+
+    implementation dependencies.coreCoroutines
+    implementation dependencies.coroutinesAndroid
+
+    implementation dependencies.koin
+    implementation dependencies.koinAndroid
+    implementation dependencies.koinViewModel
+
+    implementation dependencies.okhttp3
+
+    api dependencies.roomRuntime
+    kapt dependencies.roomKapt
+    implementation dependencies.room
+
+    implementation dependencies.picasso
+    implementation dependencies.circleImageView
+
+    testImplementation dependencies.testJUnit
+    testImplementation dependencies.testArchCore
+    testImplementation dependencies.testCoroutines
+    testImplementation dependencies.testMockK
+    testImplementation dependencies.testRobolectric
+    testImplementation dependencies.testKoin
+
+    androidTestImplementation dependencies.testRunner
+    androidTestImplementation dependencies.testRules
+    androidTestImplementation dependencies.testEspressoCore
+    androidTestImplementation dependencies.testCoreKtx
+    androidTestImplementation dependencies.testArchCore
+    androidTestImplementation dependencies.testMockK
+    androidTestImplementation dependencies.testMockKAndroid
+    androidTestImplementation dependencies.testKoin
+}
+
+android.sourceSets {
+    test {
+        java.srcDirs += "$projectDir/src/testShared"
+    }
+
+    androidTest {
+        java.srcDirs += "$projectDir/src/testShared"
+    }
+}

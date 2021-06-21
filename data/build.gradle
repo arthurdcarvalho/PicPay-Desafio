@@ -1,0 +1,62 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 30
+    }
+
+    buildTypes {
+        debug {}
+        release {
+            debuggable false
+            minifyEnabled false
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+dependencies {
+    Map<String, String> dependencies = rootProject.ext.dependencies
+
+    implementation project(':domain')
+
+    //CORE
+    implementation dependencies.kotlinLib
+    implementation dependencies.coreKtx
+
+    //COROUTINES
+    implementation dependencies.coroutinesAndroid
+
+    //KOIN
+    implementation dependencies.koin
+
+    //RETROFIT
+    implementation dependencies.squareRetrofit
+    implementation dependencies.squareConverterGson
+
+    // ROOM
+    api dependencies.roomRuntime
+    kapt dependencies.roomKapt
+    implementation dependencies.room
+
+    // TEST
+    testImplementation dependencies.testJUnit
+    testImplementation dependencies.testRobolectric
+    testImplementation dependencies.testMockK
+    testImplementation dependencies.testKoin
+    testImplementation dependencies.testCoroutines
+    testImplementation dependencies.testRoom
+}
