@@ -73,5 +73,4 @@ class UserLocalDataSourceTest {
             userLocalDataSource.getUsers().isNotEmpty()
         )
     }
-
 }

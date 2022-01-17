@@ -4,11 +4,11 @@ import com.picpay.desafio.data.source.UserRemoteDataSource
 import com.picpay.desafio.data.source.local.UserLocalDataSource
 import com.picpay.desafio.data.stub.UserStub
 import com.picpay.desafio.domain.entity.SuccessResult
+import com.picpay.desafio.domain.exceptions.NoConnectionException
 import com.picpay.desafio.domain.repository.UserRepository
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -32,18 +32,13 @@ class UserRepositoryTest {
 
     @Test
     fun when_get_user_result_users_from_remote() = runBlockingTest {
-
         coEvery {
-            userLocalDataSource.getUsers()
-        } returns emptyList()
+            userRemoteDataSource.getUsers()
+        } returns UserStub.getUserListSuccessResult()
 
         coEvery {
             userLocalDataSource.saveUsers(UserStub.getUserListSuccessResult().body)
         } returns Unit
-
-        coEvery {
-            userRemoteDataSource.getUsers()
-        } returns UserStub.getUserListSuccessResult()
 
         assertEquals(
             UserStub.getUserListSuccessResult(),
@@ -56,6 +51,10 @@ class UserRepositoryTest {
     @Test
     fun when_get_user_from_local() = runBlockingTest {
         coEvery {
+            userRemoteDataSource.getUsers()
+        } throws NoConnectionException()
+
+        coEvery {
             userLocalDataSource.getUsers()
         } returns UserStub.getUserList()
 
@@ -64,5 +63,4 @@ class UserRepositoryTest {
             repository.getUser() as SuccessResult
         )
     }
-
 }

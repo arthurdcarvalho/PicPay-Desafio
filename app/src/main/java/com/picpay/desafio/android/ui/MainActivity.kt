@@ -38,27 +38,23 @@ class MainActivity : AppCompatActivity() {
     private fun bindObservers() {
         observe(userViewModel.viewState.state) { state ->
             when (state) {
-                is ScreenState.Success -> showSuccessLayout(state)
-                is ScreenState.Empty -> { /* */ }
+                is ScreenState.Success -> adapter.users = state.users
+                is ScreenState.Empty -> {
+                    Toast.makeText(this@MainActivity, state.error, Toast.LENGTH_SHORT).show()
+                }
                 is ScreenState.NoConnection -> { /* */ }
                 is ScreenState.Error -> showErrorLayout(state)
             }
         }
-        observe(userViewModel.viewState.isLoading, ::showLoadingLayout)
-    }
-
-    private fun showSuccessLayout(state: ScreenState.Success) {
-        adapter.users = state.users
-    }
-
-    private fun showLoadingLayout(isLoading: Boolean) {
-        binding.userListProgressBar.isVisible = isLoading
+        observe(userViewModel.viewState.isLoading) { isLoading ->
+            binding.userListProgressBar.isVisible = isLoading
+        }
     }
 
     private fun showErrorLayout(state: ScreenState.Error) {
         binding.userListProgressBar.isVisible = false
         binding.recyclerView.isVisible = false
 
-        Toast.makeText(this@MainActivity, getString(R.string.error), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@MainActivity, state.error, Toast.LENGTH_SHORT).show()
     }
 }

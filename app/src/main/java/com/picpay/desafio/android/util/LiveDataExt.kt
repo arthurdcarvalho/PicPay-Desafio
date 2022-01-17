@@ -12,5 +12,5 @@ fun <T> LiveData<T>.emit(value: T) {
     require(this is MutableLiveData) {
         "$this isn't a valid MutableLiveData instance"
     }
-    this.value = value
+    postValue(value)
 }

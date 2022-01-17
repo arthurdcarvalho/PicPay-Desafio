@@ -11,10 +11,8 @@ import com.picpay.desafio.domain.entity.SuccessResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -74,5 +72,4 @@ class UserRemoteDataSourceTest {
 
         coVerify { picPayService.getUsers() }
     }
-
 }

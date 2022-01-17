@@ -7,8 +7,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-fun providesOkhttp(): OkHttpClient {
+fun providesOkhttp(context: Context): OkHttpClient {
     return OkHttpClient.Builder()
+        .addInterceptor(ConnectionInterceptor(context))
         .build()
 }
 

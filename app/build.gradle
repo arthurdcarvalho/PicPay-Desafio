@@ -89,6 +89,7 @@ dependencies {
     androidTestImplementation dependencies.testMockK
     androidTestImplementation dependencies.testMockKAndroid
     androidTestImplementation dependencies.testKoin
+    androidTestImplementation dependencies.testMockWebServer
 }
 
 android.sourceSets {

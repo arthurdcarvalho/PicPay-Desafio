@@ -21,10 +21,10 @@ class MainActivityTest : BaseTest() {
 
     @Before
     fun setUp() {
-        userViewModel = UserViewModel(userUseCase, network)
+        userViewModel = UserViewModel(userUseCase)
         loadKoinModules(
             module {
-                viewModel { UserViewModel(userUseCase, network) }
+                viewModel { UserViewModel(userUseCase) }
             }
         )
     }
@@ -62,5 +62,4 @@ class MainActivityTest : BaseTest() {
             )
         }
     }
-
 }

@@ -36,7 +36,9 @@ object DataModule {
         factory(
             named(OKHTTP)
         ) {
-            providesOkhttp()
+            providesOkhttp(
+                get()
+            )
         }
 
         factory(

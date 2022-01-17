@@ -1,5 +1,6 @@
 package com.picpay.desafio.android.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import com.picpay.desafio.android.getOrAwaitValue
 import com.picpay.desafio.android.ui.viewmodel.ScreenState
 import com.picpay.desafio.android.ui.viewmodel.UserViewModel
@@ -21,17 +22,17 @@ class UserViewModelTest : ViewModelBaseTest() {
 
     @Before
     fun setUp() {
-        userViewModel = UserViewModel(userUseCase, network)
+        userViewModel = UserViewModel(userUseCase)
     }
 
     @Test
-    fun when_on_resume_result_success() {
+    fun when_on_start_result_success() {
         coEvery {
             userUseCase.getUser()
 
         } returns UserStub.getUserListSuccessResult()
 
-        userViewModel.onResume()
+        userViewModel.onStart()
 
         assert(userViewModel.viewState.state.getOrAwaitValue() is ScreenState.Success)
 

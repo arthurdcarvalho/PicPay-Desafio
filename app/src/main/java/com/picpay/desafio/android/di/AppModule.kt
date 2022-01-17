@@ -12,8 +12,7 @@ object AppModule {
             UserViewModel(
                 get(
                     named(UserUseCase::class.java.name)
-                ),
-                get()
+                )
             )
         }
     }

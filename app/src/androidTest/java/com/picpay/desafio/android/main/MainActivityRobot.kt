@@ -45,7 +45,6 @@ class MainActivityRobot(
             userUseCase.getUser()
         } returns EmptyResult(anyString(), anyString())
     }
-
 }
 
 class MainActivityAssertRobot {

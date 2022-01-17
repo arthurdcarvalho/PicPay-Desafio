@@ -28,9 +28,6 @@ abstract class ViewModelBaseTest {
     @RelaxedMockK
     protected lateinit var context: Context
 
-    @MockK
-    protected lateinit var network: Network
-
     @Before
     fun mockitoInit() {
         MockKAnnotations.init(this)
@@ -40,8 +37,6 @@ abstract class ViewModelBaseTest {
             androidContext(context)
             modules(AppComponent.getAllModules())
         }
-
-        every { network.hasInternetConnection() } returns true
     }
 
     @After
