@@ -23,8 +23,6 @@ open class BaseTest : KoinTest {
     @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @MockK
-    protected lateinit var network: Network
 
     protected lateinit var context: Context
 
@@ -35,8 +33,6 @@ open class BaseTest : KoinTest {
         context = ApplicationProvider.getApplicationContext()
         MockKAnnotations.init(this)
         unloadKoinModules(AppModule.viewModelModule)
-
-        every { network.hasInternetConnection() } returns true
     }
 
     @After
