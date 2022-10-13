@@ -1,13 +1,17 @@
 package com.picpay.desafio.android.ui.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
 import com.picpay.desafio.android.ui.viewmodel.base.BaseViewModel
 import com.picpay.desafio.android.util.emit
-import com.picpay.desafio.domain.entity.*
-import com.picpay.desafio.domain.usecase.UserUseCase
+import com.picpay.desafio.domain.entity.EmptyResult
+import com.picpay.desafio.domain.entity.ErrorResult
+import com.picpay.desafio.domain.entity.Result
+import com.picpay.desafio.domain.entity.SuccessResult
+import com.picpay.desafio.domain.entity.User
+import com.picpay.desafio.domain.usecase.GetUserUseCase
 
 class UserViewModel(
-    private val useCase: UserUseCase
+    private val useCase: GetUserUseCase
 ) : BaseViewModel() {
 
     val viewState = UserViewState(

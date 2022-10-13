@@ -3,10 +3,10 @@ package com.picpay.desafio.domain
 import com.picpay.desafio.domain.entity.EmptyResult
 import com.picpay.desafio.domain.entity.ErrorResult
 import com.picpay.desafio.domain.entity.SuccessResult
-import com.picpay.desafio.domain.repository.UserRepository
+import com.picpay.desafio.domain.repository.GetUsersRepository
 import com.picpay.desafio.domain.stub.UserResultStub
-import com.picpay.desafio.domain.usecase.UserUseCase
-import com.picpay.desafio.domain.usecase.UserUseCaseImpl
+import com.picpay.desafio.domain.usecase.GetUserUseCase
+import com.picpay.desafio.domain.usecase.GetUserUseCaseImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -19,23 +19,23 @@ import org.junit.Test
 import org.junit.Before
 
 @ExperimentalCoroutinesApi
-class UserUseCaseTest {
+class GetUsersUseCaseTest {
 
-    private lateinit var useCase: UserUseCase
+    private lateinit var useCase: GetUserUseCase
 
     @MockK
-    private lateinit var repository: UserRepository
+    private lateinit var repository: GetUsersRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        useCase = UserUseCaseImpl(repository)
+        useCase = GetUserUseCaseImpl(repository)
     }
 
     @Test
     fun when_get_user_result_is_success() = runBlockingTest {
         coEvery {
-            repository.getUser()
+            repository.getUsers()
         } returns UserResultStub.userSuccessResult()
 
         assertTrue(
@@ -46,14 +46,14 @@ class UserUseCaseTest {
             (useCase.getUser() as SuccessResult), UserResultStub.userSuccessResult()
         )
 
-        coVerify { repository.getUser() }
+        coVerify { repository.getUsers() }
     }
 
     @Test
     fun when_get_user_result_is_empty() = runBlockingTest {
 
         coEvery {
-            repository.getUser()
+            repository.getUsers()
         } returns UserResultStub.userEmptyResult()
 
         assertTrue(
@@ -64,14 +64,14 @@ class UserUseCaseTest {
             (useCase.getUser() as EmptyResult), UserResultStub.userEmptyResult()
         )
 
-        coVerify { repository.getUser() }
+        coVerify { repository.getUsers() }
 
     }
 
     @Test
     fun when_get_user_result_is_error() = runBlockingTest {
         coEvery {
-            repository.getUser()
+            repository.getUsers()
         } returns UserResultStub.userErrorResult()
 
         assertTrue(
@@ -82,6 +82,6 @@ class UserUseCaseTest {
             (useCase.getUser() as ErrorResult), UserResultStub.userErrorResult()
         )
 
-        coVerify { repository.getUser() }
+        coVerify { repository.getUsers() }
     }
 }

@@ -1,9 +1,9 @@
 package com.picpay.desafio.data.source.remote
 
 import com.picpay.desafio.data.mapper.UserResponseListToUserListMapper
-import com.picpay.desafio.data.source.UserRemoteDataSource
-import com.picpay.desafio.data.source.UserRemoteDataSourceImpl
-import com.picpay.desafio.data.source.service.PicPayService
+import com.picpay.desafio.data.source.GetUsersRemoteDataSource
+import com.picpay.desafio.data.source.GetUsersRemoteDataSourceImpl
+import com.picpay.desafio.data.source.service.GetUsersService
 import com.picpay.desafio.data.stub.UserStub
 import com.picpay.desafio.domain.entity.EmptyResult
 import com.picpay.desafio.domain.entity.ErrorResult
@@ -20,56 +20,56 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class UserRemoteDataSourceTest {
+class GetUsersRemoteDataSourceTest {
 
-    private lateinit var userRemoteDataSource: UserRemoteDataSource
+    private lateinit var getUsersRemoteDataSource: GetUsersRemoteDataSource
 
     @MockK
-    private lateinit var picPayService: PicPayService
+    private lateinit var getUsersService: GetUsersService
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        userRemoteDataSource =
-            UserRemoteDataSourceImpl(picPayService, UserResponseListToUserListMapper())
+        getUsersRemoteDataSource =
+            GetUsersRemoteDataSourceImpl(getUsersService, UserResponseListToUserListMapper())
     }
 
     @Test
     fun when_get_user_list_success_response() = runBlockingTest {
         coEvery {
-            picPayService.getUsers()
+            getUsersService.getUsers()
         } returns UserStub.getUserListSuccessResponse()
 
         assertEquals(
             UserStub.getUserListSuccessResponse().body()?.first()?.name,
-            (userRemoteDataSource.getUsers() as SuccessResult).body.first().name
+            (getUsersRemoteDataSource.getUsers() as SuccessResult).body.first().name
         )
     }
 
     @Test
     fun when_get_user_list_empty_response() = runBlockingTest {
         coEvery {
-            picPayService.getUsers()
+            getUsersService.getUsers()
         } returns UserStub.getUserListEmptyResponse()
 
         assertTrue(
-            (userRemoteDataSource.getUsers() is EmptyResult)
+            (getUsersRemoteDataSource.getUsers() is EmptyResult)
         )
 
-        coVerify { picPayService.getUsers() }
+        coVerify { getUsersService.getUsers() }
     }
 
     @Test
     fun when_get_user_list_error_response() = runBlockingTest {
         coEvery {
-            picPayService.getUsers()
+            getUsersService.getUsers()
         } returns UserStub.getUserListErrorResponse()
 
 
         assertTrue(
-            (userRemoteDataSource.getUsers() is ErrorResult)
+            (getUsersRemoteDataSource.getUsers() is ErrorResult)
         )
 
-        coVerify { picPayService.getUsers() }
+        coVerify { getUsersService.getUsers() }
     }
 }

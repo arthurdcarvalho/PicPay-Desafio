@@ -4,7 +4,7 @@ import com.picpay.desafio.android.BaseTest
 import com.picpay.desafio.android.R
 import com.picpay.desafio.android.ui.MainActivity
 import com.picpay.desafio.android.ui.viewmodel.UserViewModel
-import com.picpay.desafio.domain.usecase.UserUseCase
+import com.picpay.desafio.domain.usecase.GetUserUseCase
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +17,7 @@ class MainActivityTest : BaseTest() {
     private lateinit var userViewModel: UserViewModel
 
     @MockK
-    private lateinit var userUseCase: UserUseCase
+    private lateinit var userUseCase: GetUserUseCase
 
     @Before
     fun setUp() {

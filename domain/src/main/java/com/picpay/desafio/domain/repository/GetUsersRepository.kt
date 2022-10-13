@@ -1,8 +1,8 @@
-package com.picpay.desafio.data.source
+package com.picpay.desafio.domain.repository
 
 import com.picpay.desafio.domain.entity.Result
 import com.picpay.desafio.domain.entity.User
 
-interface UserRemoteDataSource {
+interface GetUsersRepository {
     suspend fun getUsers(): Result<List<User>>
 }

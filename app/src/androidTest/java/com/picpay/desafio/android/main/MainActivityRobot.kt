@@ -5,12 +5,12 @@ import com.picpay.desafio.android.robot.ActionRobot
 import com.picpay.desafio.android.robot.ArrangeRobot
 import com.picpay.desafio.android.robot.AssertRobot
 import com.picpay.desafio.domain.entity.EmptyResult
-import com.picpay.desafio.domain.usecase.UserUseCase
+import com.picpay.desafio.domain.usecase.GetUserUseCase
 import io.mockk.coEvery
 import org.mockito.ArgumentMatchers.anyString
 
 fun arrange(
-    userUseCase: UserUseCase,
+    userUseCase: GetUserUseCase,
     block: MainActivityRobot.() -> Unit
 ) {
     MainActivityRobot(userUseCase).block()
@@ -31,7 +31,7 @@ fun act(
 }
 
 class MainActivityRobot(
-    private val userUseCase: UserUseCase
+    private val userUseCase: GetUserUseCase
 ) : ArrangeRobot() {
 
     fun mockUsersList() {

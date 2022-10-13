@@ -1,11 +1,12 @@
 package com.picpay.desafio.data.repository
 
-import com.picpay.desafio.data.source.UserRemoteDataSource
-import com.picpay.desafio.data.source.local.UserLocalDataSource
+import com.picpay.desafio.data.source.GetUsersRemoteDataSource
+import com.picpay.desafio.data.source.local.GetUsersLocalDataSource
+import com.picpay.desafio.data.source.local.SaveUsersLocalDataSource
 import com.picpay.desafio.data.stub.UserStub
 import com.picpay.desafio.domain.entity.SuccessResult
 import com.picpay.desafio.domain.exceptions.NoConnectionException
-import com.picpay.desafio.domain.repository.UserRepository
+import com.picpay.desafio.domain.repository.GetUsersRepository
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,52 +16,59 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class UserRepositoryTest {
-    private lateinit var repository: UserRepository
+class GetUsersRepositoryTest {
+    private lateinit var repository: GetUsersRepository
 
     @MockK
-    private lateinit var userRemoteDataSource: UserRemoteDataSource
+    private lateinit var getUsersRemoteDataSource: GetUsersRemoteDataSource
 
     @MockK
-    private lateinit var userLocalDataSource: UserLocalDataSource
+    private lateinit var getUsersLocalDataSource: GetUsersLocalDataSource
+
+    @MockK
+    private lateinit var saveUsersLocalDataSource: SaveUsersLocalDataSource
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        repository = UserRepositoryImpl(userRemoteDataSource, userLocalDataSource)
+        repository = GetUsersRepositoryImpl(
+            getUsersRemoteDataSource,
+            getUsersLocalDataSource,
+            saveUsersLocalDataSource
+        )
     }
 
     @Test
     fun when_get_user_result_users_from_remote() = runBlockingTest {
         coEvery {
-            userRemoteDataSource.getUsers()
+            getUsersRemoteDataSource.getUsers()
         } returns UserStub.getUserListSuccessResult()
 
         coEvery {
-            userLocalDataSource.saveUsers(UserStub.getUserListSuccessResult().body)
+            saveUsersLocalDataSource.saveUsers(UserStub.getUserListSuccessResult().body)
         } returns Unit
 
         assertEquals(
             UserStub.getUserListSuccessResult(),
-            repository.getUser()
+            repository.getUsers()
         )
 
-        coVerify { userRemoteDataSource.getUsers() }
+        coVerify { getUsersRemoteDataSource.getUsers() }
     }
 
     @Test
     fun when_get_user_from_local() = runBlockingTest {
         coEvery {
-            userRemoteDataSource.getUsers()
+            getUsersRemoteDataSource.getUsers()
         } throws NoConnectionException()
 
         coEvery {
-            userLocalDataSource.getUsers()
+            getUsersLocalDataSource.getUsers()
         } returns UserStub.getUserList()
 
         assertEquals(
             SuccessResult(UserStub.getUserList()),
-            repository.getUser() as SuccessResult
+            repository.getUsers() as SuccessResult
         )
     }
 }

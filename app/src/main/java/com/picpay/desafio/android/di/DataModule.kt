@@ -6,13 +6,15 @@ import com.picpay.desafio.data.client.providesService
 import com.picpay.desafio.data.mapper.UserDataListToUserListMapper
 import com.picpay.desafio.data.mapper.UserListToUserDataListMapper
 import com.picpay.desafio.data.mapper.UserResponseListToUserListMapper
-import com.picpay.desafio.data.source.UserRemoteDataSource
-import com.picpay.desafio.data.source.UserRemoteDataSourceImpl
+import com.picpay.desafio.data.source.GetUsersRemoteDataSource
+import com.picpay.desafio.data.source.GetUsersRemoteDataSourceImpl
 import com.picpay.desafio.data.source.db.PicPayRoomDatabase
 import com.picpay.desafio.data.source.db.UserDao
-import com.picpay.desafio.data.source.local.UserLocalDataSource
-import com.picpay.desafio.data.source.local.UserLocalDataSourceImpl
-import com.picpay.desafio.data.source.service.PicPayService
+import com.picpay.desafio.data.source.local.GetUsersLocalDataSource
+import com.picpay.desafio.data.source.local.GetUsersLocalDataSourceImpl
+import com.picpay.desafio.data.source.local.SaveUsersLocalDataSource
+import com.picpay.desafio.data.source.local.SaveUsersLocalDataSourceImpl
+import com.picpay.desafio.data.source.service.GetUsersService
 import com.picpay.desafio.data.util.Network
 import com.picpay.desafio.data.util.NetworkImpl
 import org.koin.android.ext.koin.androidApplication
@@ -42,9 +44,9 @@ object DataModule {
         }
 
         factory(
-            named(PicPayService::class.java.name)
+            named(GetUsersService::class.java.name)
         ) {
-            providesService<PicPayService>(
+            providesService<GetUsersService>(
                 get(),
                 get(
                     named(OKHTTP)
@@ -55,12 +57,12 @@ object DataModule {
 
     val remoteModule = module {
 
-        factory<UserRemoteDataSource>(
-            named(UserRemoteDataSource::class.java.name)
+        factory<GetUsersRemoteDataSource>(
+            named(GetUsersRemoteDataSource::class.java.name)
         ) {
-            UserRemoteDataSourceImpl(
+            GetUsersRemoteDataSourceImpl(
                 get(
-                    named(PicPayService::class.java.name)
+                    named(GetUsersService::class.java.name)
                 ),
                 get(
                     named(UserResponseListToUserListMapper::class.java.name)
@@ -80,17 +82,29 @@ object DataModule {
 
         factory(
             named(UserDao::class.java.name)
-        ) { get<PicPayRoomDatabase>().userDao() }
-
-        factory<UserLocalDataSource>(
-            named(UserLocalDataSource::class.java.name)
         ) {
-            UserLocalDataSourceImpl(
+            get<PicPayRoomDatabase>().userDao()
+        }
+
+        factory<GetUsersLocalDataSource>(
+            named(GetUsersLocalDataSource::class.java.name)
+        ) {
+            GetUsersLocalDataSourceImpl(
                 get(
                     named(UserDao::class.java.name)
                 ),
                 get(
                     named(UserDataListToUserListMapper::class.java.name)
+                )
+            )
+        }
+
+        factory<SaveUsersLocalDataSource>(
+            named(SaveUsersLocalDataSource::class.java.name)
+        ) {
+            SaveUsersLocalDataSourceImpl(
+                get(
+                    named(UserDao::class.java.name)
                 ),
                 get(
                     named(UserListToUserDataListMapper::class.java.name)

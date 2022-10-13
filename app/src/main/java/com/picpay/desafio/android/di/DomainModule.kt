@@ -1,37 +1,41 @@
 package com.picpay.desafio.android.di
 
-import com.picpay.desafio.data.source.UserRemoteDataSource
-import com.picpay.desafio.domain.repository.UserRepository
-import com.picpay.desafio.data.repository.UserRepositoryImpl
-import com.picpay.desafio.data.source.local.UserLocalDataSource
-import com.picpay.desafio.domain.usecase.UserUseCase
-import com.picpay.desafio.domain.usecase.UserUseCaseImpl
+import com.picpay.desafio.data.source.GetUsersRemoteDataSource
+import com.picpay.desafio.domain.repository.GetUsersRepository
+import com.picpay.desafio.data.repository.GetUsersRepositoryImpl
+import com.picpay.desafio.data.source.local.GetUsersLocalDataSource
+import com.picpay.desafio.data.source.local.SaveUsersLocalDataSource
+import com.picpay.desafio.domain.usecase.GetUserUseCase
+import com.picpay.desafio.domain.usecase.GetUserUseCaseImpl
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 object DomainModule {
     val useCaseModule = module {
-        factory<UserUseCase>(
-            named(UserUseCase::class.java.name)
+        factory<GetUserUseCase>(
+            named(GetUserUseCase::class.java.name)
         ) {
-            UserUseCaseImpl(
+            GetUserUseCaseImpl(
                 get(
-                    named(UserRepository::class.java.name)
+                    named(GetUsersRepository::class.java.name)
                 )
             )
         }
     }
 
     val repositoryModule = module {
-        factory<UserRepository>(
-            named(UserRepository::class.java.name)
+        factory<GetUsersRepository>(
+            named(GetUsersRepository::class.java.name)
         ) {
-            UserRepositoryImpl(
+            GetUsersRepositoryImpl(
                 get(
-                    named(UserRemoteDataSource::class.java.name)
+                    named(GetUsersRemoteDataSource::class.java.name)
                 ),
                 get(
-                    named(UserLocalDataSource::class.java.name)
+                    named(GetUsersLocalDataSource::class.java.name)
+                ),
+                get(
+                    named(SaveUsersLocalDataSource::class.java.name)
                 )
             )
         }

@@ -6,7 +6,6 @@ import com.picpay.desafio.data.source.db.UserDao
 import com.picpay.desafio.data.stub.UserStub
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -16,23 +15,21 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class UserLocalDataSourceTest {
+class GetUsersLocalDataSourceTest {
 
-    private lateinit var userLocalDataSource: UserLocalDataSource
+    private lateinit var getUsersLocalDataSource: GetUsersLocalDataSource
 
     @MockK
     private lateinit var userDao: UserDao
 
     private val userDataListToUserListMapper = UserDataListToUserListMapper()
-    private val userListToUserDataListMapper = UserListToUserDataListMapper()
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        userLocalDataSource = UserLocalDataSourceImpl(
+        getUsersLocalDataSource = GetUsersLocalDataSourceImpl(
             userDao,
-            userDataListToUserListMapper,
-            userListToUserDataListMapper
+            userDataListToUserListMapper
         )
     }
 
@@ -44,7 +41,7 @@ class UserLocalDataSourceTest {
 
         assertEquals(
             userDataListToUserListMapper.transform(UserStub.getUserDataList()),
-            userLocalDataSource.getUsers()
+            getUsersLocalDataSource.getUsers()
         )
     }
 
@@ -55,22 +52,8 @@ class UserLocalDataSourceTest {
         } returns emptyList()
 
         assertTrue(
-            userLocalDataSource.getUsers().isEmpty()
+            getUsersLocalDataSource.getUsers().isEmpty()
         )
     }
 
-    @Test
-    fun when_save_user_list() = runBlockingTest {
-        coEvery {
-            userDao.getUserList()
-        } returns UserStub.getUserDataList()
-
-        coEvery {
-            userLocalDataSource.saveUsers(UserStub.getUserList())
-        }
-
-        assertTrue(
-            userLocalDataSource.getUsers().isNotEmpty()
-        )
-    }
 }
